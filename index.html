@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kamus Pribadi AI - LexiVault</title>
+    <title>Kamus AI - Kamus Kosakata Pribadi</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter, Plus Jakarta Sans & Fraunces (Editorial Serif) -->
@@ -91,14 +91,14 @@
         <div class="max-w-5xl mx-auto bg-white/75 backdrop-blur-xl border border-white/80 shadow-[0_8px_30px_rgb(0,0,0,0.04)] rounded-full px-4 sm:px-6 h-16 flex items-center justify-between">
             <div class="flex items-center gap-3">
                 <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-zen-600 via-emerald-500 to-teal-400 text-white flex items-center justify-center shadow-md shadow-emerald-500/20">
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                    <i data-lucide="book-open" class="w-5 h-5"></i>
                 </div>
                 <div>
                     <div class="flex items-center gap-2">
-                        <h1 class="font-display font-extrabold text-lg text-slate-900 tracking-tight leading-none">LexiVault</h1>
+                        <h1 class="font-display font-extrabold text-lg text-slate-900 tracking-tight leading-none">Kamus</h1>
                         <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800">AI</span>
                     </div>
-                    <p class="text-[11px] text-slate-500 mt-0.5 hidden sm:block">Jurnal & Kamus Kosakata Personalmu</p>
+                    <p class="text-[11px] text-slate-500 mt-0.5 hidden sm:block">Jurnal & Kosakata Personalmu</p>
                 </div>
             </div>
 
@@ -151,7 +151,7 @@
                     Simpan kata baru, <span class="font-serif italic font-semibold text-zen-600">pahami maknanya</span> seketika.
                 </h2>
                 <p class="text-sm sm:text-base text-slate-500 mt-2.5 leading-relaxed">
-                    Ketik kata, slang, atau frasa dari bahasa apa pun. AI akan meracik arti, pelafalan audio, nuansa pemakaian, hingga contoh kalimat yang natural.
+                    Ketik kata, slang, atau frasa dari bahasa apa pun (Indonesia, Inggris, Korea, dll). AI akan meracik arti, pelafalan audio, nuansa pemakaian, hingga contoh kalimat yang natural.
                 </p>
             </div>
 
@@ -164,7 +164,7 @@
                     <input 
                         type="text" 
                         id="word-input" 
-                        placeholder="Ketik kata atau frasa... misal: Sonder, Petrichor, Niskala" 
+                        placeholder="Ketik kata/frasa... misal: Sonder, 설레다, Niskala" 
                         required
                         autocomplete="off"
                         class="w-full pl-12 pr-4 py-4 bg-slate-50/90 border border-slate-200/90 rounded-full text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 focus:bg-white transition-all shadow-inner shadow-slate-900/[0.02]"
@@ -176,6 +176,7 @@
                     <select id="target-lang" aria-label="Bahasa Penjelasan" class="w-full sm:w-auto appearance-none pl-4 pr-10 py-4 bg-slate-50/90 border border-slate-200/90 rounded-full text-sm text-slate-700 font-semibold focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 hover:bg-white cursor-pointer transition-all">
                         <option value="Indonesia">🇮🇩 B. Indonesia</option>
                         <option value="English">🇬🇧 English</option>
+                        <option value="Korea (한국어)">🇰🇷 한국어 (Korea)</option>
                     </select>
                     <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"></i>
                 </div>
@@ -195,9 +196,10 @@
             <div class="mt-4 flex flex-wrap items-center gap-2 text-xs">
                 <span class="text-slate-400 font-medium mr-1">Coba kata estetik:</span>
                 <button type="button" onclick="quickFillWord('Sonder')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">✨ Sonder</button>
-                <button type="button" onclick="quickFillWord('Petrichor')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🌧️ Petrichor</button>
+                <button type="button" onclick="quickFillWord('설레다')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🇰🇷 설레다</button>
+                <button type="button" onclick="quickFillWord('눈치')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🇰🇷 눈치</button>
                 <button type="button" onclick="quickFillWord('Niskala')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🌿 Niskala</button>
-                <button type="button" onclick="quickFillWord('Komorebi')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🍃 Komorebi</button>
+                <button type="button" onclick="quickFillWord('Petrichor')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🌧️ Petrichor</button>
             </div>
 
             <!-- Loading Skeleton / AI Thinking State -->
@@ -354,7 +356,7 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
             <div class="flex items-center gap-2 font-medium">
                 <span class="w-2 h-2 rounded-full bg-zen-500"></span>
-                <span>LexiVault AI &bull; Ruang Belajar Kosakata Personal</span>
+                <span>Kamus AI &bull; Ruang Belajar Kosakata Personal</span>
             </div>
             <p class="text-slate-400">Otomatis tersimpan rapi di perangkatmu</p>
         </div>
@@ -485,7 +487,7 @@
 
             const systemPrompt = `Anda adalah leksikografer ahli dan tutor bahasa pribadi. 
 Tugas Anda adalah menganalisis kata atau frasa yang diberikan pengguna dan mengembalikan informasi kamus terstruktur yang akurat, kaya makna, dan mudah dipahami.
-Pastikan nilai 'partOfSpeech' dikategorikan secara konsisten ke dalam salah satu dari: "Nomina", "Verba", "Adjektiva", "Adverbia", atau "Frasa" (jika dalam bahasa Inggris tetap gunakan kategori dasar tersebut agar filter rapi, misalnya Nomina untuk Noun, Verba untuk Verb, Adjektiva untuk Adjective, Adverbia untuk Adverb, Frasa untuk Phrase/Idiom).`;
+Pastikan nilai 'partOfSpeech' dikategorikan secara konsisten ke dalam salah satu dari: "Nomina", "Verba", "Adjektiva", "Adverbia", atau "Frasa" (jika dalam bahasa Inggris atau Korea tetap gunakan kategori dasar tersebut agar filter rapi, misalnya Nomina untuk Noun/명사, Verba untuk Verb/동사, Adjektiva untuk Adjective/형용사, Adverbia untuk Adverb/부사, Frasa untuk Phrase/Idiom/관용구).`;
 
             const userQuery = `Analisis kata/frasa berikut: "${word}". 
 Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${targetLang}.`;
@@ -498,9 +500,9 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
                     responseSchema: {
                         type: "OBJECT",
                         properties: {
-                            word: { type: "STRING", description: "Kata atau frasa dengan kapitalisasi yang benar" },
-                            phonetic: { type: "STRING", description: "Transkripsi fonetik IPA, misal /ˌser.ənˈdɪp.ə.ti/" },
-                            language: { type: "STRING", description: "Bahasa asal kata tersebut (misal: Inggris, Indonesia, Jepang)" },
+                            word: { type: "STRING", description: "Kata atau frasa dengan kapitalisasi/penulisan yang benar" },
+                            phonetic: { type: "STRING", description: "Transkripsi fonetik IPA atau romanisasi pelafalan (misal untuk Korea: [seol-le-da])" },
+                            language: { type: "STRING", description: "Bahasa asal kata tersebut (misal: Inggris, Indonesia, Korea, Jepang)" },
                             partOfSpeech: { 
                                 type: "STRING", 
                                 enum: ["Nomina", "Verba", "Adjektiva", "Adverbia", "Frasa"],
@@ -543,11 +545,12 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             
-            // Deteksi kode bahasa sederhana
+            // Deteksi kode bahasa sederhana (termasuk deteksi karakter Hangul otomatis)
             const lowerLang = (langName || '').toLowerCase();
-            if (lowerLang.includes('indonesia')) utterance.lang = 'id-ID';
+            const hasHangul = /[\uac00-\ud7af]/.test(text);
+            if (hasHangul || lowerLang.includes('korea') || lowerLang.includes('한국')) utterance.lang = 'ko-KR';
+            else if (lowerLang.includes('indonesia')) utterance.lang = 'id-ID';
             else if (lowerLang.includes('jepang') || lowerLang.includes('japan')) utterance.lang = 'ja-JP';
-            else if (lowerLang.includes('korea')) utterance.lang = 'ko-KR';
             else if (lowerLang.includes('perancis') || lowerLang.includes('french')) utterance.lang = 'fr-FR';
             else if (lowerLang.includes('spanyol') || lowerLang.includes('spanish')) utterance.lang = 'es-ES';
             else if (lowerLang.includes('jerman') || lowerLang.includes('german')) utterance.lang = 'de-DE';

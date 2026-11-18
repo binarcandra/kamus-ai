@@ -145,18 +145,33 @@
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
                     </span>
-                    <span>Eksplorasi Kosakata Bertenaga AI</span>
+                    <span>Definisi Bahasa Asli + Indonesia &bull; Rujukan Otoritatif</span>
                 </div>
                 <h2 class="font-display text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
                     Simpan kata baru, <span class="font-serif italic font-semibold text-zen-600">pahami maknanya</span> seketika.
                 </h2>
                 <p class="text-sm sm:text-base text-slate-500 mt-2.5 leading-relaxed">
-                    Ketik kata, slang, atau frasa dari bahasa apa pun (Indonesia, Inggris, Korea, dll). AI akan meracik arti, pelafalan audio, nuansa pemakaian, hingga contoh kalimat yang natural.
+                    Ketik kata, slang, atau frasa dari bahasa apa pun. AI akan menampilkan definisi otoritatif dalam bahasa aslinya sekaligus padanan maknanya dalam Bahasa Indonesia.
                 </p>
             </div>
 
-            <!-- Input Form -->
-            <form id="word-form" onsubmit="handleLookupWord(event)" class="relative mt-7 flex flex-col sm:flex-row gap-3">
+            <!-- Onboarding Banner when API Key is not set yet -->
+            <div id="missing-key-banner" class="hidden mt-6 p-4 rounded-2xl bg-amber-50/90 border border-amber-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-start sm:items-center gap-3">
+                    <div class="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i>
+                    </div>
+                    <div class="text-xs text-amber-900 leading-relaxed">
+                        <strong>Pengguna baru?</strong> Aplikasi ini memakai <em>Gemini API Key</em> pribadi (100% gratis dari Google) agar kuota AI-mu aman dan tidak dibatasi orang lain.
+                    </div>
+                </div>
+                <button type="button" onclick="openSettingsModal()" class="px-4 py-2 rounded-full bg-amber-600 hover:bg-amber-700 text-white text-xs font-semibold transition-all shrink-0 self-start sm:self-auto shadow-xs">
+                    Pasang API Key &rarr;
+                </button>
+            </div>
+
+            <!-- Input Form (Clean Single-Input + Action Button) -->
+            <form id="word-form" onsubmit="handleLookupWord(event)" class="relative mt-6 flex flex-col sm:flex-row gap-3">
                 <div class="relative flex-1 group">
                     <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
                         <i data-lucide="search" class="w-5 h-5"></i>
@@ -164,28 +179,18 @@
                     <input 
                         type="text" 
                         id="word-input" 
-                        placeholder="Ketik kata/frasa... misal: Sonder, 설레다, Niskala" 
+                        placeholder="Ketik kata/frasa apa saja... misal: Sonder, 설레다, شغف, Niskala" 
                         required
                         autocomplete="off"
                         class="w-full pl-12 pr-4 py-4 bg-slate-50/90 border border-slate-200/90 rounded-full text-slate-900 placeholder-slate-400 text-sm font-medium focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 focus:bg-white transition-all shadow-inner shadow-slate-900/[0.02]"
                     >
                 </div>
 
-                <!-- Target Language Selector -->
-                <div class="relative">
-                    <select id="target-lang" aria-label="Bahasa Penjelasan" class="w-full sm:w-auto appearance-none pl-4 pr-10 py-4 bg-slate-50/90 border border-slate-200/90 rounded-full text-sm text-slate-700 font-semibold focus:outline-none focus:ring-4 focus:ring-blue-600/10 focus:border-blue-600 hover:bg-white cursor-pointer transition-all">
-                        <option value="Indonesia">🇮🇩 B. Indonesia</option>
-                        <option value="English">🇬🇧 English</option>
-                        <option value="Korea (한국어)">🇰🇷 한국어 (Korea)</option>
-                    </select>
-                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400 pointer-events-none absolute right-4 top-1/2 -translate-y-1/2"></i>
-                </div>
-
                 <!-- Pill Action Button (#0f172a -> hover #2563eb) -->
                 <button 
                     type="submit" 
                     id="submit-btn"
-                    class="inline-flex items-center justify-center gap-2 px-7 py-4 rounded-full bg-[#0f172a] hover:bg-[#2563eb] text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-slate-900/10 hover:shadow-blue-600/25 active:scale-95 disabled:opacity-60 disabled:pointer-events-none shrink-0"
+                    class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-[#0f172a] hover:bg-[#2563eb] text-white font-semibold text-sm transition-all duration-200 shadow-md shadow-slate-900/10 hover:shadow-blue-600/25 active:scale-95 disabled:opacity-60 disabled:pointer-events-none shrink-0"
                 >
                     <i data-lucide="sparkles" class="w-4 h-4"></i>
                     <span id="submit-btn-text">Analisis & Simpan</span>
@@ -197,7 +202,7 @@
                 <span class="text-slate-400 font-medium mr-1">Coba kata estetik:</span>
                 <button type="button" onclick="quickFillWord('Sonder')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">✨ Sonder</button>
                 <button type="button" onclick="quickFillWord('설레다')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🇰🇷 설레다</button>
-                <button type="button" onclick="quickFillWord('눈치')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🇰🇷 눈치</button>
+                <button type="button" onclick="quickFillWord('شغف')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🇸🇦 شغف</button>
                 <button type="button" onclick="quickFillWord('Niskala')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🌿 Niskala</button>
                 <button type="button" onclick="quickFillWord('Petrichor')" class="px-3 py-1 rounded-full bg-slate-100/80 hover:bg-zen-100 text-slate-600 hover:text-zen-800 font-medium transition-colors cursor-pointer">🌧️ Petrichor</button>
             </div>
@@ -206,8 +211,8 @@
             <div id="ai-loading" class="hidden mt-6 p-5 rounded-3xl bg-gradient-to-r from-zen-50 to-emerald-50/70 border border-zen-200/80 flex items-center gap-4 animate-pulse">
                 <div class="w-9 h-9 rounded-full border-[3px] border-zen-600 border-t-transparent animate-spin shrink-0"></div>
                 <div>
-                    <p class="text-sm font-bold text-zen-900">AI sedang merangkai definisi...</p>
-                    <p class="text-xs text-zen-700 mt-0.5">Mencari fonetik, konteks penggunaan, contoh kalimat, dan sinonim terbaik.</p>
+                    <p class="text-sm font-bold text-zen-900">Sedang mengecek kamus...</p>
+                    <p class="text-xs text-zen-700 mt-0.5">Mencari definisi otoritatif, pelafalan, dan contoh kalimat.</p>
                 </div>
             </div>
 
@@ -248,7 +253,7 @@
                             type="text" 
                             id="filter-input" 
                             oninput="renderDictionary()"
-                            placeholder="Cari arti atau kata..." 
+                            placeholder="Cari arti, kata, atau sumber..." 
                             class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200/90 rounded-full text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-600 focus:ring-2 focus:ring-blue-600/10"
                         >
                     </div>
@@ -260,6 +265,28 @@
                         <option value="Adverbia">Adverbia (Keterangan)</option>
                         <option value="Frasa">Frasa / Idiom</option>
                     </select>
+
+                    <!-- Backup & Restore JSON Buttons -->
+                    <div class="flex items-center gap-1.5 pl-1 border-l border-slate-200/80">
+                        <button 
+                            type="button" 
+                            onclick="exportDictionaryJSON()" 
+                            title="Unduh Backup Kosakata (.json)"
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-100/90 hover:bg-zen-100 text-slate-700 hover:text-zen-800 text-xs font-semibold transition-all active:scale-95"
+                        >
+                            <i data-lucide="download" class="w-3.5 h-3.5"></i>
+                            <span class="hidden sm:inline">Export</span>
+                        </button>
+                        <label 
+                            for="import-json-input" 
+                            title="Muat Backup Kosakata (.json)"
+                            class="inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-slate-100/90 hover:bg-blue-50 text-slate-700 hover:text-blue-700 text-xs font-semibold transition-all active:scale-95 cursor-pointer"
+                        >
+                            <i data-lucide="upload" class="w-3.5 h-3.5"></i>
+                            <span class="hidden sm:inline">Import</span>
+                        </label>
+                        <input type="file" id="import-json-input" accept=".json,application/json" onchange="importDictionaryJSON(event)" class="hidden">
+                    </div>
                 </div>
             </div>
 
@@ -282,9 +309,9 @@
 
     </main>
 
-    <!-- API Key Settings Modal (Safe for GitHub Pages!) -->
-    <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="bg-white rounded-[2rem] max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 animate-entry relative overflow-hidden">
+    <!-- API Key Settings Modal (With Clear User Instructions!) -->
+    <div id="settings-modal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-white rounded-[2rem] max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 animate-entry relative overflow-hidden my-auto">
             <div class="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-zen-500 to-emerald-400"></div>
             <div class="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div class="flex items-center gap-3">
@@ -293,7 +320,7 @@
                     </div>
                     <div>
                         <h3 class="font-display font-extrabold text-slate-900">Pengaturan API Key</h3>
-                        <p class="text-xs text-slate-500">Aman disimpan khusus di browsermu</p>
+                        <p class="text-xs text-slate-500">Kunci akses AI gratis milikmu sendiri</p>
                     </div>
                 </div>
                 <button onclick="closeSettingsModal()" class="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors">
@@ -301,20 +328,51 @@
                 </button>
             </div>
 
-            <div class="py-5 space-y-4">
-                <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-2xl border border-slate-200/70">
-                    🔒 <strong>100% Aman untuk GitHub Pages:</strong> API Key tidak ditulis di kode publik, melainkan disimpan secara lokal di perangkat ini (<code class="text-zen-700 font-semibold">localStorage</code>).
-                </p>
+            <div class="py-4 space-y-4">
+                <!-- Explanation Box -->
+                <div class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-3.5 rounded-2xl border border-slate-200/70 space-y-1.5">
+                    <p class="font-bold text-slate-800">💡 Kenapa perlu API Key?</p>
+                    <p>
+                        Agar fitur kamus AI berfungsi tanpa batas antrean orang lain, setiap pengguna memakai kunci gratis dari Google AI Studio. Kuncimu <strong>hanya disimpan di browser perangkat ini</strong> dan tidak dikirim ke server mana pun.
+                    </p>
+                </div>
+
+                <!-- Step-by-Step Guide -->
+                <div class="bg-zen-50/70 border border-zen-200/70 rounded-2xl p-3.5 space-y-2.5">
+                    <p class="text-xs font-bold text-zen-900 flex items-center gap-1.5">
+                        <i data-lucide="list-ordered" class="w-3.5 h-3.5 text-zen-600"></i>
+                        Cara Mendapatkan API Key Gratis (30 Detik):
+                    </p>
+                    <ol class="text-xs text-slate-700 space-y-2 list-decimal list-inside leading-relaxed">
+                        <li>
+                            Buka 
+                            <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 font-bold text-blue-600 hover:text-blue-700 underline underline-offset-2">
+                                Google AI Studio <i data-lucide="external-link" class="w-3 h-3"></i>
+                            </a> 
+                            lalu login dengan akun Google (Gmail).
+                        </li>
+                        <li>
+                            Klik tombol biru <strong>"Create API key"</strong> &rarr; pilih proyek baru, lalu klik <strong>Copy</strong> pada kode yang muncul.
+                        </li>
+                        <li>
+                            Tempel (<em>Paste</em>) kode tersebut ke kotak di bawah ini dan klik <strong>Simpan</strong>.
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Input Box -->
                 <div>
-                    <label for="api-key-input" class="block text-xs font-bold text-slate-700 mb-1.5">Gemini API Key</label>
+                    <label for="api-key-input" class="block text-xs font-bold text-slate-700 mb-1.5">Tempel Gemini API Key Kamu:</label>
                     <input 
                         type="password" 
                         id="api-key-input" 
-                        placeholder="Tempel kode AIzaSy... di sini" 
+                        placeholder="AIzaSy..." 
                         class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-sm text-slate-900 focus:outline-none focus:border-blue-600 focus:bg-white transition-all"
                     >
                 </div>
-                <div class="flex items-center justify-between gap-2 pt-2">
+
+                <!-- Actions -->
+                <div class="flex items-center justify-between gap-2 pt-1">
                     <button type="button" onclick="clearSavedApiKey()" class="px-4 py-2.5 rounded-full text-xs font-semibold text-red-600 hover:bg-red-50 transition-colors">
                         Hapus Key
                     </button>
@@ -377,6 +435,9 @@
                 phonetic: '/ˌser.ənˈdɪp.ə.ti/',
                 language: 'Inggris',
                 partOfSpeech: 'Nomina',
+                source: 'Oxford English Dictionary',
+                isOfficialSource: true,
+                originalDefinition: 'The occurrence and development of events by chance in a happy or beneficial way.',
                 definition: 'Keberuntungan menemukan sesuatu yang berharga, menyenangkan, atau menguntungkan secara tidak sengaja saat sedang mencari hal lain.',
                 example: 'Finding that rare vinyl record in a tiny Bandung thrift shop was pure serendipity.',
                 exampleTranslation: 'Menemukan piringan hitam langka di toko barang antik kecil di Bandung itu adalah sebuah keberuntungan yang tak terduga.',
@@ -391,6 +452,9 @@
                 phonetic: '/ɪˈfem.ər.əl/',
                 language: 'Inggris',
                 partOfSpeech: 'Adjektiva',
+                source: 'Merriam-Webster Dictionary',
+                isOfficialSource: true,
+                originalDefinition: 'Lasting for a very short time.',
                 definition: 'Sesuatu yang berlangsung sangat singkat, fana, atau hanya bertahan dalam waktu yang sebentar saja.',
                 example: 'Sunset hues over the ocean are breathtaking precisely because they are ephemeral.',
                 exampleTranslation: 'Warna senja di atas lautan terasa memukau justru karena keindahannya hanya sesaat.',
@@ -423,11 +487,19 @@
 
         function updateApiKeyIndicator() {
             const dot = document.getElementById('api-status-dot');
-            const hasKey = Boolean(localStorage.getItem(API_KEY_STORAGE));
+            const banner = document.getElementById('missing-key-banner');
+            const hasKey = Boolean(getActiveApiKey());
             if (dot) {
                 dot.className = hasKey 
                     ? 'w-2 h-2 rounded-full bg-emerald-500' 
                     : 'w-2 h-2 rounded-full bg-amber-400 animate-pulse';
+            }
+            if (banner) {
+                if (hasKey) {
+                    banner.classList.add('hidden');
+                } else {
+                    banner.classList.remove('hidden');
+                }
             }
         }
 
@@ -435,6 +507,7 @@
             const input = document.getElementById('api-key-input');
             input.value = localStorage.getItem(API_KEY_STORAGE) || '';
             document.getElementById('settings-modal').classList.remove('hidden');
+            lucide.createIcons();
         }
 
         function closeSettingsModal() {
@@ -450,7 +523,7 @@
             localStorage.setItem(API_KEY_STORAGE, val);
             updateApiKeyIndicator();
             closeSettingsModal();
-            showToast('API Key berhasil disimpan di browser kamu!', 'success');
+            showToast('API Key berhasil disimpan! Sekarang kamu bisa mulai mencari kata.', 'success');
         }
 
         function clearSavedApiKey() {
@@ -481,16 +554,51 @@
             }
         }
 
-        async function analyzeWordWithAI(word, targetLang) {
+        async function analyzeWordWithAI(word) {
             const activeKey = getActiveApiKey();
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${activeKey}`;
 
-            const systemPrompt = `Anda adalah leksikografer ahli dan tutor bahasa pribadi. 
-Tugas Anda adalah menganalisis kata atau frasa yang diberikan pengguna dan mengembalikan informasi kamus terstruktur yang akurat, kaya makna, dan mudah dipahami.
-Pastikan nilai 'partOfSpeech' dikategorikan secara konsisten ke dalam salah satu dari: "Nomina", "Verba", "Adjektiva", "Adverbia", atau "Frasa" (jika dalam bahasa Inggris atau Korea tetap gunakan kategori dasar tersebut agar filter rapi, misalnya Nomina untuk Noun/명사, Verba untuk Verb/동사, Adjektiva untuk Adjective/형용사, Adverbia untuk Adverb/부사, Frasa untuk Phrase/Idiom/관용구).`;
+            const systemPrompt = `Anda adalah leksikografer ahli dan tutor bahasa pribadi untuk pengguna berbahasa Indonesia. 
+Tugas Anda adalah menganalisis kata atau frasa yang diberikan pengguna dan menyajikan informasi kamus terstruktur dengan DUA definisi:
+1. 'originalDefinition': Definisi otoritatif dalam BAHASA ASAL kata tersebut (sesuai gaya kamus rujukannya). *(Catatan: Jika kata yang dicari memang berasal dari Bahasa Indonesia, isi 'originalDefinition' dengan string kosong "" agar tidak terjadi pengulangan definisi).*
+2. 'definition': Definisi lengkap, akurat, dan alami dalam BAHASA INDONESIA.
+
+ATURAN BAHASA OUTPUT (WAJIB DIPATUHI):
+- Field 'definition', 'exampleTranslation', dan 'nuance' HARUS ditulis 100% dalam BAHASA INDONESIA yang jelas dan alami.
+- Field 'originalDefinition' ditulis dalam BAHASA ASAL kata (kecuali kata Bahasa Indonesia, kosongkan "").
+- Field 'word', 'example', dan 'synonyms' menggunakan bahasa asal kata tersebut.
+
+HIERARKI SUMBER RUJUKAN WAJIB:
+1. Prioritaskan lembaga bahasa / kamus otoritatif resmi sesuai bahasa asal kata tersebut. Sebutkan HANYA SATU nama kamus/institusi spesifik yang paling relevan sebagai sumbernya (JANGAN gunakan garis miring):
+   - Bahasa Indonesia: "KBBI (Badan Pengembangan dan Pembinaan Bahasa)"
+   - Bahasa Melayu: "Kamus Dewan (Dewan Bahasa dan Pustaka)"
+   - Bahasa Korea: "표준국어대사전 (국립국어원)"
+   - Bahasa Inggris: Pilih satu yang paling tepat — "Oxford English Dictionary", "Merriam-Webster Dictionary", atau "Cambridge Dictionary".
+   - Bahasa Arab: Pilih satu yang paling tepat — "المعجم الوسيط (مجمع اللغة العربية بالقاهرة)" untuk bahasa Arab standar modern, atau "لسان العرب" untuk bahasa Arab klasik.
+   - Bahasa Mandarin: "现代汉语词典 (中国社会科学院语言研究所)"
+   - Bahasa Jepang: Pilih satu — "広辞苑 (Kōjien)" atau "大辞林 (Daijirin)".
+   - Bahasa Prancis: "Dictionnaire de l'Académie française"
+   - Bahasa Spanyol: "Diccionario de la lengua española (RAE)"
+   - Bahasa Portugis: "Dicionário da Língua Portuguesa (Academia das Ciências de Lisboa)"
+   - Bahasa Italia: "Vocabolario della Crusca (Accademia della Crusca)"
+   - Bahasa Jerman: "Duden"
+   - Bahasa Belanda: "Woordenlijst Nederlandse Taal (Taalunie)" atau "Van Dale"
+   - Bahasa Rusia: "Словарь русского языка (Институт русского языка РАН)"
+   - Bahasa Turki: "Güncel Türkçe Sözlük (Türk Dil Kurumu)"
+   - Bahasa Persia: "لغت‌نامه دهخدا (Dehkhoda Dictionary)"
+   - Bahasa Hindi: "मानक हिन्दी कोश (केन्द्रीय हिन्दी निदेशालय)"
+   - Bahasa Thailand: "พจนานุกรม ฉบับราชบัณฑิตยสถาน (Royal Society of Thailand)"
+   - Bahasa Vietnam: "Từ điển tiếng Việt (Viện Ngôn ngữ học)"
+   - Bahasa lainnya (Swedia, Polandia, Yunani, Ibrani, Tagalog/Filipino, Swahili, dll.): Sebutkan SATU nama resmi badan bahasa nasional (seperti Svenska Akademien, RJP, Akademi Bahasa Ibrani, KWF) atau kamus standar utamanya.
+2. JIKA kata/frasa tersebut merupakan bahasa gaul modern (slang), neologisme internet, idiom pop-culture, atau kata estetik non-baku (seperti "Sonder", "Baper", "갓생", dll.) yang tidak tercatat secara baku di kamus resmi utama di atas:
+   - Tetap berikan penjelasan akurat berdasarkan korpus penggunaan kontemporer.
+   - Isi field 'source' dengan satu rujukan non-resmi yang paling spesifik (misal: "The Dictionary of Obscure Sorrows", "우리말샘 (Urimalsaem)", "Urban Dictionary", atau "Korpus Bahasa Umum").
+   - Set 'isOfficialSource' menjadi false (jika dari kamus otoritatif utama, set true).
+
+Pastikan nilai 'partOfSpeech' dikategorikan secara konsisten ke dalam salah satu dari: "Nomina", "Verba", "Adjektiva", "Adverbia", atau "Frasa".`;
 
             const userQuery = `Analisis kata/frasa berikut: "${word}". 
-Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${targetLang}.`;
+Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru sumber umum/slang), sebutkan SATU nama sumber kamus yang spesifik, berikan definisi dalam bahasa asalnya ('originalDefinition') serta definisi lengkap dalam Bahasa Indonesia ('definition').`;
 
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
@@ -500,25 +608,37 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
                     responseSchema: {
                         type: "OBJECT",
                         properties: {
-                            word: { type: "STRING", description: "Kata atau frasa dengan kapitalisasi/penulisan yang benar" },
-                            phonetic: { type: "STRING", description: "Transkripsi fonetik IPA atau romanisasi pelafalan (misal untuk Korea: [seol-le-da])" },
-                            language: { type: "STRING", description: "Bahasa asal kata tersebut (misal: Inggris, Indonesia, Korea, Jepang)" },
+                            word: { type: "STRING", description: "Kata atau frasa dengan kapitalisasi/penulisan yang benar dalam bahasa asalnya" },
+                            phonetic: { type: "STRING", description: "Transkripsi fonetik IPA atau romanisasi pelafalan (misal untuk Korea: [seol-le-da], Arab: /ʃa.ɣaf/)" },
+                            language: { type: "STRING", description: "Bahasa asal kata tersebut dalam Bahasa Indonesia (misal: Inggris, Indonesia, Korea, Arab, Jepang)" },
                             partOfSpeech: { 
                                 type: "STRING", 
                                 enum: ["Nomina", "Verba", "Adjektiva", "Adverbia", "Frasa"],
                                 description: "Kelas kata"
                             },
-                            definition: { type: "STRING", description: "Definisi lengkap dan jelas" },
+                            source: { 
+                                type: "STRING", 
+                                description: "SATU nama kamus otoritatif atau sumber rujukan spesifik (tanpa garis miring dua kamus)" 
+                            },
+                            isOfficialSource: {
+                                type: "BOOLEAN",
+                                description: "true jika berasal dari kamus lembaga resmi/otoritatif utama, false jika berasal dari sumber slang/umum/non-baku"
+                            },
+                            originalDefinition: { 
+                                type: "STRING", 
+                                description: "Definisi dari kamus rujukan dalam bahasa asli kata tersebut (kosongkan '' jika kata berasal dari Bahasa Indonesia)" 
+                            },
+                            definition: { type: "STRING", description: "Definisi lengkap dan jelas dalam Bahasa Indonesia" },
                             example: { type: "STRING", description: "Satu contoh kalimat alami dalam bahasa asal kata" },
-                            exampleTranslation: { type: "STRING", description: "Terjemahan contoh kalimat" },
+                            exampleTranslation: { type: "STRING", description: "Terjemahan contoh kalimat dalam Bahasa Indonesia" },
                             synonyms: { 
                                 type: "ARRAY", 
                                 items: { type: "STRING" },
-                                description: "Maksimal 4 sinonim atau kata terkait"
+                                description: "Maksimal 4 sinonim atau kata terkait dalam bahasa asal kata"
                             },
-                            nuance: { type: "STRING", description: "Catatan singkat penggunaan, konteks formal/informal, atau etimologi menarik" }
+                            nuance: { type: "STRING", description: "Catatan singkat penggunaan, konteks formal/informal, atau etimologi dalam Bahasa Indonesia" }
                         },
-                        required: ["word", "phonetic", "language", "partOfSpeech", "definition", "example", "exampleTranslation", "synonyms", "nuance"]
+                        required: ["word", "phonetic", "language", "partOfSpeech", "source", "isOfficialSource", "originalDefinition", "definition", "example", "exampleTranslation", "synonyms", "nuance"]
                     }
                 }
             };
@@ -529,31 +649,52 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
                 body: JSON.stringify(payload)
             });
 
-            const rawText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!rawText) throw new Error("Respons AI kosong.");
-            return JSON.parse(rawText);
+            const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!textResponse) {
+                throw new Error("Respons kosong dari AI");
+            }
+
+            return JSON.parse(textResponse);
         }
 
         // ==========================================
-        // TEXT-TO-SPEECH (PRONUNCIATION)
+        // TEXT-TO-SPEECH (PRONUNCIATION AUDIO)
         // ==========================================
         function speakWord(text, langName) {
             if (!('speechSynthesis' in window)) {
-                showToast('Browser Anda tidak mendukung fitur suara.', 'error');
+                showToast('Browser Anda tidak mendukung fitur suara.', 'warning');
                 return;
             }
             window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
-            
-            // Deteksi kode bahasa sederhana (termasuk deteksi karakter Hangul otomatis)
+
+            // Deteksi kode bahasa otomatis (Hangul Korea, Aksara Arab, Mandarin, Jepang, Kiril, Thai, dll.)
             const lowerLang = (langName || '').toLowerCase();
             const hasHangul = /[\uac00-\ud7af]/.test(text);
+            const hasArabic = /[\u0600-\u06FF]/.test(text);
+            const hasHiraganaKatakana = /[\u3040-\u30ff]/.test(text);
+            const hasHanzi = /[\u4e00-\u9faf]/.test(text);
+            const hasCyrillic = /[\u0400-\u04FF]/.test(text);
+            const hasThai = /[\u0E00-\u0E7F]/.test(text);
+
             if (hasHangul || lowerLang.includes('korea') || lowerLang.includes('한국')) utterance.lang = 'ko-KR';
+            else if (hasArabic || lowerLang.includes('arab')) utterance.lang = 'ar-SA';
+            else if (lowerLang.includes('persia') || lowerLang.includes('farsi')) utterance.lang = 'fa-IR';
+            else if (hasHiraganaKatakana || lowerLang.includes('jepang') || lowerLang.includes('japan')) utterance.lang = 'ja-JP';
+            else if (hasHanzi || lowerLang.includes('mandarin') || lowerLang.includes('china') || lowerLang.includes('tionghoa')) utterance.lang = 'zh-CN';
+            else if (hasCyrillic || lowerLang.includes('rusia') || lowerLang.includes('russian')) utterance.lang = 'ru-RU';
+            else if (hasThai || lowerLang.includes('thai')) utterance.lang = 'th-TH';
             else if (lowerLang.includes('indonesia')) utterance.lang = 'id-ID';
-            else if (lowerLang.includes('jepang') || lowerLang.includes('japan')) utterance.lang = 'ja-JP';
-            else if (lowerLang.includes('perancis') || lowerLang.includes('french')) utterance.lang = 'fr-FR';
+            else if (lowerLang.includes('melayu') || lowerLang.includes('malay')) utterance.lang = 'ms-MY';
+            else if (lowerLang.includes('prancis') || lowerLang.includes('perancis') || lowerLang.includes('french')) utterance.lang = 'fr-FR';
             else if (lowerLang.includes('spanyol') || lowerLang.includes('spanish')) utterance.lang = 'es-ES';
+            else if (lowerLang.includes('portugis') || lowerLang.includes('portuguese')) utterance.lang = 'pt-PT';
+            else if (lowerLang.includes('italia') || lowerLang.includes('italian')) utterance.lang = 'it-IT';
             else if (lowerLang.includes('jerman') || lowerLang.includes('german')) utterance.lang = 'de-DE';
+            else if (lowerLang.includes('belanda') || lowerLang.includes('dutch')) utterance.lang = 'nl-NL';
+            else if (lowerLang.includes('turki') || lowerLang.includes('turkish')) utterance.lang = 'tr-TR';
+            else if (lowerLang.includes('hindi')) utterance.lang = 'hi-IN';
+            else if (lowerLang.includes('vietnam')) utterance.lang = 'vi-VN';
             else utterance.lang = 'en-US';
 
             utterance.rate = 0.92;
@@ -596,10 +737,16 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
         async function handleLookupWord(event) {
             event.preventDefault();
             const inputEl = document.getElementById('word-input');
-            const targetLang = document.getElementById('target-lang').value;
             const rawWord = inputEl.value.trim();
 
             if (!rawWord) return;
+
+            // Cek jika API Key belum dimasukkan
+            if (!getActiveApiKey()) {
+                showToast('Masukkan Gemini API Key gratis kamu dulu untuk memulai pencarian.', 'warning');
+                openSettingsModal();
+                return;
+            }
 
             // Cek duplikasi
             const exists = dictionaryEntries.some(item => item.word.toLowerCase() === rawWord.toLowerCase());
@@ -612,7 +759,7 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
             hideToast();
 
             try {
-                const aiData = await analyzeWordWithAI(rawWord, targetLang);
+                const aiData = await analyzeWordWithAI(rawWord);
                 
                 const newEntry = {
                     id: 'word-' + Date.now(),
@@ -629,15 +776,10 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
                 renderDictionary();
 
                 inputEl.value = '';
-                showToast(`Yay! "${newEntry.word}" berhasil ditambahkan ke koleksimu.`, 'success');
+                showToast(`Yay! "${newEntry.word}" (${newEntry.source}) berhasil ditambahkan.`, 'success');
             } catch (error) {
                 console.error(error);
-                if (!getActiveApiKey()) {
-                    showToast('API Key belum diatur! Klik tombol "API Key" di pojok kanan atas.', 'warning');
-                    openSettingsModal();
-                } else {
-                    showToast('Gagal menghubungi AI. Periksa kembali API Key atau koneksimu.', 'error');
-                }
+                showToast('Gagal menghubungi AI. Periksa kembali API Key atau koneksimu.', 'error');
             } finally {
                 setLoadingState(false);
             }
@@ -660,6 +802,88 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
             } catch (e) {
                 console.error('Gagal menyimpan ke localStorage', e);
             }
+        }
+
+        // ==========================================
+        // EXPORT & IMPORT BACKUP (JSON)
+        // ==========================================
+        function exportDictionaryJSON() {
+            if (!dictionaryEntries || dictionaryEntries.length === 0) {
+                showToast('Belum ada kosakata untuk di-export.', 'warning');
+                return;
+            }
+            const dataStr = JSON.stringify(dictionaryEntries, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const dateStamp = new Date().toISOString().slice(0, 10);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `kamus-ai-backup-${dateStamp}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showToast(`Berhasil mengunduh ${dictionaryEntries.length} kosakata (.json)!`, 'success');
+        }
+
+        function importDictionaryJSON(event) {
+            const file = event.target.files?.[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (!Array.isArray(importedData)) {
+                        throw new Error('Format file JSON tidak valid.');
+                    }
+
+                    // Gabungkan tanpa duplikat berdasarkan kata (case-insensitive)
+                    const existingWords = new Set(dictionaryEntries.map(item => (item.word || '').toLowerCase()));
+                    let addedCount = 0;
+
+                    importedData.forEach(item => {
+                        if (item && item.word && item.definition && !existingWords.has(item.word.toLowerCase())) {
+                            dictionaryEntries.unshift({
+                                id: item.id || ('word-' + Date.now() + '-' + Math.random().toString(36).slice(2, 6)),
+                                word: String(item.word),
+                                phonetic: String(item.phonetic || ''),
+                                language: String(item.language || 'Umum'),
+                                partOfSpeech: ['Nomina', 'Verba', 'Adjektiva', 'Adverbia', 'Frasa'].includes(item.partOfSpeech) ? item.partOfSpeech : 'Frasa',
+                                source: String(item.source || 'Kamus Otoritatif'),
+                                isOfficialSource: item.isOfficialSource !== undefined ? Boolean(item.isOfficialSource) : true,
+                                originalDefinition: String(item.originalDefinition || ''),
+                                definition: String(item.definition),
+                                example: String(item.example || ''),
+                                exampleTranslation: String(item.exampleTranslation || ''),
+                                synonyms: Array.isArray(item.synonyms) ? item.synonyms : [],
+                                nuance: String(item.nuance || ''),
+                                isFavorite: Boolean(item.isFavorite),
+                                createdAt: item.createdAt || new Date().toISOString()
+                            });
+                            existingWords.add(item.word.toLowerCase());
+                            addedCount++;
+                        }
+                    });
+
+                    saveToStorage();
+                    renderDictionary();
+
+                    if (addedCount > 0) {
+                        showToast(`Berhasil mengimpor ${addedCount} kosakata baru!`, 'success');
+                    } else {
+                        showToast('Semua kata di file backup sudah ada di kamusmu.', 'info');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToast('Gagal membaca file JSON. Pastikan file backup valid.', 'error');
+                } finally {
+                    event.target.value = '';
+                }
+            };
+            reader.readAsText(file);
         }
 
         function getPosBadgeStyle(pos) {
@@ -687,11 +911,13 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
             const totalCount = dictionaryEntries.length;
             document.getElementById('total-words-badge').textContent = totalCount;
 
-            // Filter data
+            // Filter data (termasuk pencarian definisi asli maupun nama sumber)
             const filtered = dictionaryEntries.filter(item => {
                 const matchesText = 
                     item.word.toLowerCase().includes(filterText) ||
                     item.definition.toLowerCase().includes(filterText) ||
+                    (item.originalDefinition && item.originalDefinition.toLowerCase().includes(filterText)) ||
+                    (item.source && item.source.toLowerCase().includes(filterText)) ||
                     (item.synonyms && item.synonyms.some(s => s.toLowerCase().includes(filterText)));
                 const matchesCategory = categoryFilter === 'ALL' || item.partOfSpeech === categoryFilter;
                 const matchesFav = !onlyFavorites || Boolean(item.isFavorite);
@@ -714,13 +940,42 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
                     `<span class="inline-block px-3 py-1 rounded-full bg-slate-100/90 hover:bg-slate-200/70 text-slate-700 text-xs font-medium transition-colors">${escapeHtml(syn)}</span>`
                 ).join('');
 
+                // Badge Sumber Rujukan (Otoritatif vs Umum/Slang)
+                const sourceName = item.source || 'Rujukan Umum';
+                const isOfficial = item.isOfficialSource !== false;
+                const sourceBadgeHtml = isOfficial
+                    ? `<span title="Sumber Kamus Resmi / Otoritatif" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-indigo-50 border border-indigo-200/70 text-indigo-700 text-[11px] font-semibold">
+                         <i data-lucide="shield-check" class="w-3 h-3 text-indigo-600 shrink-0"></i>
+                         <span>${escapeHtml(sourceName)}</span>
+                       </span>`
+                    : `<span title="Sumber Umum / Non-Baku / Slang" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-50/90 border border-amber-200/70 text-amber-800 text-[11px] font-semibold">
+                         <i data-lucide="globe" class="w-3 h-3 text-amber-600 shrink-0"></i>
+                         <span>${escapeHtml(sourceName)}</span>
+                       </span>`;
+
+                // Blok Definisi Bahasa Asli (ditampilkan jika berbeda dari Bahasa Indonesia)
+                const hasOrigDef = item.originalDefinition && item.originalDefinition.trim() !== '' && item.originalDefinition.trim().toLowerCase() !== item.definition.trim().toLowerCase();
+                const isArabicText = /[\u0600-\u06FF]/.test(item.originalDefinition || '');
+                const originalDefHtml = hasOrigDef ? `
+                    <div class="p-3.5 rounded-2xl bg-indigo-50/45 border border-indigo-100/80 space-y-1">
+                        <div class="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-indigo-600">
+                            <span>Definisi Asli (${escapeHtml(item.language)})</span>
+                        </div>
+                        <p ${isArabicText ? 'dir="rtl" lang="ar"' : ''} class="text-slate-700 text-xs sm:text-sm leading-relaxed font-medium">
+                            ${escapeHtml(item.originalDefinition)}
+                        </p>
+                    </div>
+                ` : '';
+
+                const isArabicExample = /[\u0600-\u06FF]/.test(item.example || '');
+
                 return `
                 <article class="bg-white/90 backdrop-blur-md rounded-3xl py-6 px-6 sm:px-8 border border-white shadow-[0_4px_24px_rgb(15,23,42,0.03)] hover:shadow-[0_12px_32px_rgb(15,23,42,0.07)] hover:-translate-y-0.5 transition-all duration-300 group animate-entry">
                     <div class="flex items-start justify-between gap-4">
                         <div class="space-y-3 flex-1">
-                            <!-- Word Title, Phonetic & Audio -->
-                            <div class="flex flex-wrap items-center gap-2.5">
-                                <h4 class="font-serif text-2xl sm:text-[28px] font-bold text-slate-900 tracking-tight leading-none">
+                            <!-- Word Title, Phonetic, Audio & Source -->
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h4 class="font-serif text-2xl sm:text-[28px] font-bold text-slate-900 tracking-tight leading-none mr-0.5">
                                     ${escapeHtml(item.word)}
                                 </h4>
                                 <span class="text-xs sm:text-sm font-mono text-slate-500 bg-slate-100/80 px-2.5 py-0.5 rounded-full">${escapeHtml(item.phonetic || '')}</span>
@@ -737,16 +992,23 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
                                 <span class="px-2.5 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[11px] font-medium">
                                     ${escapeHtml(item.language)}
                                 </span>
+                                ${sourceBadgeHtml}
                             </div>
 
-                            <!-- Definition -->
-                            <p class="text-slate-700 text-sm sm:text-[15px] leading-relaxed">
-                                ${escapeHtml(item.definition)}
-                            </p>
+                            <!-- Dual Definitions: Original Language + Bahasa Indonesia -->
+                            <div class="space-y-2.5">
+                                ${originalDefHtml}
+                                <div class="space-y-0.5">
+                                    ${hasOrigDef ? '<span class="inline-block text-[10px] font-bold uppercase tracking-wider text-zen-700">Arti Bahasa Indonesia</span>' : ''}
+                                    <p class="text-slate-800 text-sm sm:text-[15px] leading-relaxed">
+                                        ${escapeHtml(item.definition)}
+                                    </p>
+                                </div>
+                            </div>
 
                             <!-- Example Box -->
                             <div class="p-4 rounded-2xl bg-slate-50/90 border border-slate-100 border-l-4 ${posStyle.accent} space-y-1">
-                                <p class="text-sm italic font-medium text-slate-800">"${escapeHtml(item.example)}"</p>
+                                <p ${isArabicExample ? 'dir="rtl" lang="ar"' : ''} class="text-sm italic font-medium text-slate-800">"${escapeHtml(item.example)}"</p>
                                 <p class="text-xs text-slate-500">${escapeHtml(item.exampleTranslation)}</p>
                             </div>
 
@@ -889,7 +1151,7 @@ Berikan definisi, terjemahan contoh kalimat, dan catatan nuansa dalam bahasa ${t
             if (isLoading) {
                 loadingBox.classList.remove('hidden');
                 submitBtn.disabled = true;
-                submitText.textContent = 'Meracik...';
+                submitText.textContent = 'Mengecek...';
             } else {
                 loadingBox.classList.add('hidden');
                 submitBtn.disabled = false;

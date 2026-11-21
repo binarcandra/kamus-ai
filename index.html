@@ -145,13 +145,13 @@
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                         <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
                     </span>
-                    <span>Definisi Bahasa Asli + Indonesia &bull; Rujukan Otoritatif</span>
+                    <span>Terverifikasi Google Search &bull; Definisi Bahasa Asli + Indonesia</span>
                 </div>
                 <h2 class="font-display text-2xl sm:text-4xl font-extrabold text-slate-900 tracking-tight leading-[1.15]">
                     Simpan kata baru, <span class="font-serif italic font-semibold text-zen-600">pahami maknanya</span> seketika.
                 </h2>
                 <p class="text-sm sm:text-base text-slate-500 mt-2.5 leading-relaxed">
-                    Ketik kata, slang, atau frasa dari bahasa apa pun. AI akan menampilkan definisi otoritatif dalam bahasa aslinya sekaligus padanan maknanya dalam Bahasa Indonesia.
+                    Ketik kata, slang, atau frasa dari bahasa apa pun. AI akan memverifikasi kamus otoritatif secara langsung dan menyajikan definisi bahasa asli beserta padanan Bahasa Indonesia.
                 </p>
             </div>
 
@@ -212,7 +212,7 @@
                 <div class="w-9 h-9 rounded-full border-[3px] border-zen-600 border-t-transparent animate-spin shrink-0"></div>
                 <div>
                     <p class="text-sm font-bold text-zen-900">Sedang mengecek kamus...</p>
-                    <p class="text-xs text-zen-700 mt-0.5">Mencari definisi otoritatif, pelafalan, dan contoh kalimat.</p>
+                    <p class="text-xs text-zen-700 mt-0.5">Memverifikasi entri resmi via Google Search, pelafalan, dan contoh kalimat.</p>
                 </div>
             </div>
 
@@ -443,6 +443,7 @@
                 exampleTranslation: 'Menemukan piringan hitam langka di toko barang antik kecil di Bandung itu adalah sebuah keberuntungan yang tak terduga.',
                 synonyms: ['Fortuity', 'Providence', 'Happy accident'],
                 nuance: 'Sering dipakai dalam obrolan reflektif atau caption estetik untuk menggambarkan kebetulan yang indah.',
+                webSources: [],
                 isFavorite: true,
                 createdAt: new Date().toISOString()
             },
@@ -460,6 +461,7 @@
                 exampleTranslation: 'Warna senja di atas lautan terasa memukau justru karena keindahannya hanya sesaat.',
                 synonyms: ['Transient', 'Fleeting', 'Momentary'],
                 nuance: 'Berasal dari bahasa Yunani "ephemeros" yang berarti "berumur sehari".',
+                webSources: [],
                 isFavorite: false,
                 createdAt: new Date(Date.now() - 86400000).toISOString()
             }
@@ -535,7 +537,7 @@
         }
 
         // ==========================================
-        // GEMINI API INTEGRATION (WITH BACKOFF)
+        // GEMINI API INTEGRATION (WITH BACKOFF + SEARCH GROUNDING)
         // ==========================================
         async function fetchWithRetry(url, options, maxRetries = 4) {
             let delay = 1000;
@@ -559,6 +561,8 @@
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${activeKey}`;
 
             const systemPrompt = `Anda adalah leksikografer ahli dan tutor bahasa pribadi untuk pengguna berbahasa Indonesia. 
+WAJIB GUNAKAN GOOGLE SEARCH untuk memverifikasi entri kata/frasa secara langsung ke kamus resmi atau sumber otoritatif sebelum menyusun jawaban.
+
 Tugas Anda adalah menganalisis kata atau frasa yang diberikan pengguna dan menyajikan informasi kamus terstruktur dengan DUA definisi:
 1. 'originalDefinition': Definisi otoritatif dalam BAHASA ASAL kata tersebut (sesuai gaya kamus rujukannya). *(Catatan: Jika kata yang dicari memang berasal dari Bahasa Indonesia, isi 'originalDefinition' dengan string kosong "" agar tidak terjadi pengulangan definisi).*
 2. 'definition': Definisi lengkap, akurat, dan alami dalam BAHASA INDONESIA.
@@ -569,7 +573,7 @@ ATURAN BAHASA OUTPUT (WAJIB DIPATUHI):
 - Field 'word', 'example', dan 'synonyms' menggunakan bahasa asal kata tersebut.
 
 HIERARKI SUMBER RUJUKAN WAJIB:
-1. Prioritaskan lembaga bahasa / kamus otoritatif resmi sesuai bahasa asal kata tersebut. Sebutkan HANYA SATU nama kamus/institusi spesifik yang paling relevan sebagai sumbernya (JANGAN gunakan garis miring):
+1. Verifikasi terlebih dahulu melalui Google Search ke lembaga bahasa / kamus otoritatif resmi sesuai bahasa asal kata tersebut. Sebutkan HANYA SATU nama kamus/institusi spesifik yang paling relevan sebagai sumbernya (JANGAN gunakan garis miring):
    - Bahasa Indonesia: "KBBI (Badan Pengembangan dan Pembinaan Bahasa)"
    - Bahasa Melayu: "Kamus Dewan (Dewan Bahasa dan Pustaka)"
    - Bahasa Korea: "표준국어대사전 (국립국어원)"
@@ -591,55 +595,36 @@ HIERARKI SUMBER RUJUKAN WAJIB:
    - Bahasa Vietnam: "Từ điển tiếng Việt (Viện Ngôn ngữ học)"
    - Bahasa lainnya (Swedia, Polandia, Yunani, Ibrani, Tagalog/Filipino, Swahili, dll.): Sebutkan SATU nama resmi badan bahasa nasional (seperti Svenska Akademien, RJP, Akademi Bahasa Ibrani, KWF) atau kamus standar utamanya.
 2. JIKA kata/frasa tersebut merupakan bahasa gaul modern (slang), neologisme internet, idiom pop-culture, atau kata estetik non-baku (seperti "Sonder", "Baper", "갓생", dll.) yang tidak tercatat secara baku di kamus resmi utama di atas:
-   - Tetap berikan penjelasan akurat berdasarkan korpus penggunaan kontemporer.
+   - Tetap berikan penjelasan akurat berdasarkan hasil penelusuran korpus penggunaan kontemporer.
    - Isi field 'source' dengan satu rujukan non-resmi yang paling spesifik (misal: "The Dictionary of Obscure Sorrows", "우리말샘 (Urimalsaem)", "Urban Dictionary", atau "Korpus Bahasa Umum").
    - Set 'isOfficialSource' menjadi false (jika dari kamus otoritatif utama, set true).
 
-Pastikan nilai 'partOfSpeech' dikategorikan secara konsisten ke dalam salah satu dari: "Nomina", "Verba", "Adjektiva", "Adverbia", atau "Frasa".`;
+FORMAT OUTPUT WAJIB (JSON MURNI TANPA TEKS TAMBAHAN):
+Kembalikan HANYA objek JSON valid dengan struktur persis berikut:
+{
+  "word": "Kata atau frasa dengan kapitalisasi/penulisan benar dalam bahasa asalnya",
+  "phonetic": "Transkripsi fonetik IPA atau romanisasi pelafalan",
+  "language": "Bahasa asal kata dalam Bahasa Indonesia (misal: Inggris, Indonesia, Korea, Arab)",
+  "partOfSpeech": "Salah satu dari: Nomina | Verba | Adjektiva | Adverbia | Frasa",
+  "source": "SATU nama kamus otoritatif atau sumber rujukan spesifik (tanpa garis miring)",
+  "isOfficialSource": true,
+  "originalDefinition": "Definisi dari kamus rujukan dalam bahasa asli kata (kosongkan '' jika Bahasa Indonesia)",
+  "definition": "Definisi lengkap dan jelas dalam Bahasa Indonesia",
+  "example": "Satu contoh kalimat alami dalam bahasa asal kata",
+  "exampleTranslation": "Terjemahan contoh kalimat dalam Bahasa Indonesia",
+  "synonyms": ["maksimal 4 sinonim dalam bahasa asal kata"],
+  "nuance": "Catatan singkat penggunaan, konteks formal/informal, atau etimologi dalam Bahasa Indonesia"
+}`;
 
-            const userQuery = `Analisis kata/frasa berikut: "${word}". 
-Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru sumber umum/slang), sebutkan SATU nama sumber kamus yang spesifik, berikan definisi dalam bahasa asalnya ('originalDefinition') serta definisi lengkap dalam Bahasa Indonesia ('definition').`;
+            const userQuery = `Verifikasi dan analisis kata/frasa berikut menggunakan pencarian kamus resmi: "${word}". 
+Cari entri resminya terlebih dahulu di kamus otoritatif bahasa asalnya, sebutkan SATU nama sumber kamus yang spesifik, berikan definisi dalam bahasa asalnya ('originalDefinition') serta definisi lengkap dalam Bahasa Indonesia ('definition'). Kembalikan HANYA JSON valid.`;
 
             const payload = {
                 contents: [{ parts: [{ text: userQuery }] }],
                 systemInstruction: { parts: [{ text: systemPrompt }] },
+                tools: [{ google_search: {} }],
                 generationConfig: {
-                    responseMimeType: "application/json",
-                    responseSchema: {
-                        type: "OBJECT",
-                        properties: {
-                            word: { type: "STRING", description: "Kata atau frasa dengan kapitalisasi/penulisan yang benar dalam bahasa asalnya" },
-                            phonetic: { type: "STRING", description: "Transkripsi fonetik IPA atau romanisasi pelafalan (misal untuk Korea: [seol-le-da], Arab: /ʃa.ɣaf/)" },
-                            language: { type: "STRING", description: "Bahasa asal kata tersebut dalam Bahasa Indonesia (misal: Inggris, Indonesia, Korea, Arab, Jepang)" },
-                            partOfSpeech: { 
-                                type: "STRING", 
-                                enum: ["Nomina", "Verba", "Adjektiva", "Adverbia", "Frasa"],
-                                description: "Kelas kata"
-                            },
-                            source: { 
-                                type: "STRING", 
-                                description: "SATU nama kamus otoritatif atau sumber rujukan spesifik (tanpa garis miring dua kamus)" 
-                            },
-                            isOfficialSource: {
-                                type: "BOOLEAN",
-                                description: "true jika berasal dari kamus lembaga resmi/otoritatif utama, false jika berasal dari sumber slang/umum/non-baku"
-                            },
-                            originalDefinition: { 
-                                type: "STRING", 
-                                description: "Definisi dari kamus rujukan dalam bahasa asli kata tersebut (kosongkan '' jika kata berasal dari Bahasa Indonesia)" 
-                            },
-                            definition: { type: "STRING", description: "Definisi lengkap dan jelas dalam Bahasa Indonesia" },
-                            example: { type: "STRING", description: "Satu contoh kalimat alami dalam bahasa asal kata" },
-                            exampleTranslation: { type: "STRING", description: "Terjemahan contoh kalimat dalam Bahasa Indonesia" },
-                            synonyms: { 
-                                type: "ARRAY", 
-                                items: { type: "STRING" },
-                                description: "Maksimal 4 sinonim atau kata terkait dalam bahasa asal kata"
-                            },
-                            nuance: { type: "STRING", description: "Catatan singkat penggunaan, konteks formal/informal, atau etimologi dalam Bahasa Indonesia" }
-                        },
-                        required: ["word", "phonetic", "language", "partOfSpeech", "source", "isOfficialSource", "originalDefinition", "definition", "example", "exampleTranslation", "synonyms", "nuance"]
-                    }
+                    temperature: 0.2
                 }
             };
 
@@ -649,12 +634,27 @@ Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru
                 body: JSON.stringify(payload)
             });
 
-            const textResponse = result.candidates?.[0]?.content?.parts?.[0]?.text;
-            if (!textResponse) {
-                throw new Error("Respons kosong dari AI");
+            const candidate = result.candidates?.[0];
+            const rawText = candidate?.content?.parts?.[0]?.text || '';
+            const cleanJson = rawText.replace(/```json|```/gi, '').trim();
+
+            const jsonStart = cleanJson.indexOf('{');
+            const jsonEnd = cleanJson.lastIndexOf('}');
+            if (jsonStart === -1 || jsonEnd === -1) {
+                throw new Error("Respons AI tidak mengandung struktur JSON yang valid.");
             }
 
-            return JSON.parse(textResponse);
+            const parsedData = JSON.parse(cleanJson.slice(jsonStart, jsonEnd + 1));
+
+            // Ekstrak tautan verifikasi sumber dari Google Search Grounding
+            const groundingChunks = candidate?.groundingMetadata?.groundingChunks || [];
+            const webSources = groundingChunks
+                .filter(chunk => chunk.web && chunk.web.uri && chunk.web.title)
+                .map(chunk => ({ title: chunk.web.title, uri: chunk.web.uri }))
+                .slice(0, 3);
+
+            parsedData.webSources = webSources;
+            return parsedData;
         }
 
         // ==========================================
@@ -776,7 +776,7 @@ Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru
                 renderDictionary();
 
                 inputEl.value = '';
-                showToast(`Yay! "${newEntry.word}" (${newEntry.source}) berhasil ditambahkan.`, 'success');
+                showToast(`Yay! "${newEntry.word}" (${newEntry.source}) berhasil terverifikasi & disimpan.`, 'success');
             } catch (error) {
                 console.error(error);
                 showToast('Gagal menghubungi AI. Periksa kembali API Key atau koneksimu.', 'error');
@@ -860,6 +860,7 @@ Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru
                                 exampleTranslation: String(item.exampleTranslation || ''),
                                 synonyms: Array.isArray(item.synonyms) ? item.synonyms : [],
                                 nuance: String(item.nuance || ''),
+                                webSources: Array.isArray(item.webSources) ? item.webSources : [],
                                 isFavorite: Boolean(item.isFavorite),
                                 createdAt: item.createdAt || new Date().toISOString()
                             });
@@ -937,7 +938,7 @@ Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru
             listContainer.innerHTML = filtered.map((item) => {
                 const posStyle = getPosBadgeStyle(item.partOfSpeech);
                 const synonymsHtml = (item.synonyms || []).map(syn => 
-                    `<span class="inline-block px-3 py-1 rounded-full bg-slate-100/90 hover:bg-slate-200/70 text-slate-700 text-xs font-medium transition-colors">${escapeHtml(syn)}</span>`
+                    `<button type="button" onclick="quickFillWord('${escapeQuotes(syn)}')" class="inline-block px-3 py-1 rounded-full bg-slate-100/90 hover:bg-zen-100 text-slate-700 hover:text-zen-900 text-xs font-medium transition-colors cursor-pointer">${escapeHtml(syn)}</button>`
                 ).join('');
 
                 // Badge Sumber Rujukan (Otoritatif vs Umum/Slang)
@@ -964,6 +965,19 @@ Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru
                         <p ${isArabicText ? 'dir="rtl" lang="ar"' : ''} class="text-slate-700 text-xs sm:text-sm leading-relaxed font-medium">
                             ${escapeHtml(item.originalDefinition)}
                         </p>
+                    </div>
+                ` : '';
+
+                // Tautan Verifikasi Google Search Grounding (jika tersedia)
+                const webSourcesHtml = (Array.isArray(item.webSources) && item.webSources.length > 0) ? `
+                    <div class="pt-2 border-t border-slate-100 flex flex-wrap items-center gap-1.5">
+                        <span class="text-[11px] font-medium text-slate-400 mr-1">Tautan rujukan:</span>
+                        ${item.webSources.map(src => `
+                            <a href="${escapeHtml(src.uri)}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-50 hover:bg-blue-50 border border-slate-200/80 text-[11px] font-medium text-blue-600 transition-colors">
+                                <span>${escapeHtml(src.title)}</span>
+                                <i data-lucide="external-link" class="w-2.5 h-2.5"></i>
+                            </a>
+                        `).join('')}
                     </div>
                 ` : '';
 
@@ -1024,6 +1038,8 @@ Rujuk kamus otoritatif resmi bahasa asalnya terlebih dahulu (jika tidak ada baru
                                 <i data-lucide="sparkles" class="w-3.5 h-3.5 text-zen-600 shrink-0 mt-0.5"></i>
                                 <span class="leading-relaxed">${escapeHtml(item.nuance)}</span>
                             </div>` : ''}
+
+                            ${webSourcesHtml}
                         </div>
 
                         <!-- Action Buttons: Favorite & Delete -->

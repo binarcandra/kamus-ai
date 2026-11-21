@@ -307,6 +307,113 @@
             </div>
         </section>
 
+        <!-- FAQ Section (Accordion) -->
+        <section id="faq-section" class="pt-4 space-y-5">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 px-1">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-zen-700 bg-zen-100/80 px-3 py-1 rounded-full mb-2">
+                        <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+                        <span>Bantuan & Informasi</span>
+                    </div>
+                    <h3 class="font-display text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Pertanyaan yang Sering Diajukan (FAQ)</h3>
+                </div>
+                <p class="text-xs text-slate-500">Panduan singkat cara kerja Kamus AI &amp; API Key</p>
+            </div>
+
+            <div class="space-y-3" id="faq-list">
+                <!-- FAQ 1 -->
+                <details class="group bg-white/85 backdrop-blur-md rounded-2xl border border-white shadow-[0_4px_20px_rgb(15,23,42,0.03)] open:shadow-[0_8px_28px_rgb(15,23,42,0.05)] transition-all">
+                    <summary class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 cursor-pointer list-none select-none font-display font-bold text-sm sm:text-[15px] text-slate-900">
+                        <span>1. Apakah Kamus AI ini gratis digunakan?</span>
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-zen-100 text-slate-600 group-hover:text-zen-700 flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100/80">
+                        <strong class="text-slate-800">Ya, 100% gratis!</strong> Tidak ada biaya langganan, iklan, maupun batasan fitur terkunci (<em>paywall</em>). Untuk menjalankan kecerdasan buatannya, kamu cukup menggunakan kuota gratis resmi dari Google melalui <strong class="text-slate-800">Gemini API Key</strong> milikmu sendiri.
+                    </div>
+                </details>
+
+                <!-- FAQ 2 -->
+                <details class="group bg-white/85 backdrop-blur-md rounded-2xl border border-white shadow-[0_4px_20px_rgb(15,23,42,0.03)] open:shadow-[0_8px_28px_rgb(15,23,42,0.05)] transition-all">
+                    <summary class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 cursor-pointer list-none select-none font-display font-bold text-sm sm:text-[15px] text-slate-900">
+                        <span>2. Apa itu Gemini API Key dan kenapa saya harus memasukkannya?</span>
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-zen-100 text-slate-600 group-hover:text-zen-700 flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100/80 space-y-2">
+                        <p><strong class="text-slate-800">Gemini API Key</strong> adalah kode akses pribadi gratis dari Google yang menghubungkan halaman kamus ini ke otak AI Google Gemini.</p>
+                        <ul class="list-disc list-inside space-y-1 text-slate-600">
+                            <li><strong class="text-slate-800">Kenapa pakai milik sendiri?</strong> Agar aplikasi ini tetap bisa diakses gratis selamanya oleh siapa saja tanpa antrean atau kuota habis karena dipakai bersamaan oleh banyak orang.</li>
+                            <li><strong class="text-slate-800">Apakah aman?</strong> Sangat aman. API Key yang kamu masukkan hanya tersimpan di memori browser perangkatmu sendiri (<code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-xs">localStorage</code>) dan tidak pernah dikirim atau disimpan ke server pembuat website ini.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- FAQ 3 -->
+                <details class="group bg-white/85 backdrop-blur-md rounded-2xl border border-white shadow-[0_4px_20px_rgb(15,23,42,0.03)] open:shadow-[0_8px_28px_rgb(15,23,42,0.05)] transition-all">
+                    <summary class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 cursor-pointer list-none select-none font-display font-bold text-sm sm:text-[15px] text-slate-900">
+                        <span>3. Bagaimana cara membuat Gemini API Key gratis?</span>
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-zen-100 text-slate-600 group-hover:text-zen-700 flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100/80 space-y-2">
+                        <p>Prosesnya hanya butuh waktu sekitar 30 detik:</p>
+                        <ol class="list-decimal list-inside space-y-1">
+                            <li>Buka situs resmi <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer" class="font-semibold text-blue-600 hover:underline">Google AI Studio</a> dan login menggunakan akun Google (Gmail).</li>
+                            <li>Klik tombol <strong class="text-slate-800">"Create API key"</strong> lalu pilih proyek baru.</li>
+                            <li>Salin (<em>Copy</em>) kode yang muncul, lalu tempel (<em>Paste</em>) melalui tombol <button type="button" onclick="openSettingsModal()" class="font-semibold text-zen-700 hover:underline">API Key</button> di pojok kanan atas halaman Kamus AI ini.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                <!-- FAQ 4 -->
+                <details class="group bg-white/85 backdrop-blur-md rounded-2xl border border-white shadow-[0_4px_20px_rgb(15,23,42,0.03)] open:shadow-[0_8px_28px_rgb(15,23,42,0.05)] transition-all">
+                    <summary class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 cursor-pointer list-none select-none font-display font-bold text-sm sm:text-[15px] text-slate-900">
+                        <span>4. Apakah kata-kata yang saya cari bisa dilihat oleh orang lain?</span>
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-zen-100 text-slate-600 group-hover:text-zen-700 flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100/80">
+                        <strong class="text-slate-800">Tidak.</strong> Kamus AI tidak memiliki <em>database</em> pusat yang merekam pencarianmu. Semua kosakata, daftar favorit, dan riwayat pencarian tersimpan secara eksklusif di penyimpanan lokal browser perangkatmu masing-masing.
+                    </div>
+                </details>
+
+                <!-- FAQ 5 -->
+                <details class="group bg-white/85 backdrop-blur-md rounded-2xl border border-white shadow-[0_4px_20px_rgb(15,23,42,0.03)] open:shadow-[0_8px_28px_rgb(15,23,42,0.05)] transition-all">
+                    <summary class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 cursor-pointer list-none select-none font-display font-bold text-sm sm:text-[15px] text-slate-900">
+                        <span>5. Bagaimana cara memindahkan koleksi kosakata ke HP atau laptop lain?</span>
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-zen-100 text-slate-600 group-hover:text-zen-700 flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100/80 space-y-1.5">
+                        <p>Karena data tersimpan secara lokal di browser, kamu bisa menggunakan fitur <strong class="text-slate-800">Export</strong> dan <strong class="text-slate-800">Import</strong> di bagian atas daftar <em>Koleksi Kosakata</em>:</p>
+                        <ul class="list-disc list-inside space-y-1">
+                            <li>Klik <strong class="text-slate-800">Export</strong> untuk mengunduh seluruh catatan kosakatamu dalam bentuk file cadangan (<code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-xs">.json</code>).</li>
+                            <li>Buka Kamus AI di perangkat barumu, lalu klik <strong class="text-slate-800">Import</strong> dan pilih file <code class="px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 text-xs">.json</code> tersebut—semua kosakatamu akan langsung tergabung tanpa ada yang ganda.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <!-- FAQ 6 -->
+                <details class="group bg-white/85 backdrop-blur-md rounded-2xl border border-white shadow-[0_4px_20px_rgb(15,23,42,0.03)] open:shadow-[0_8px_28px_rgb(15,23,42,0.05)] transition-all">
+                    <summary class="flex items-center justify-between gap-4 px-5 sm:px-6 py-4 cursor-pointer list-none select-none font-display font-bold text-sm sm:text-[15px] text-slate-900">
+                        <span>6. Dari mana sumber definisi kata di Kamus AI berasal?</span>
+                        <span class="w-7 h-7 rounded-full bg-slate-100 group-hover:bg-zen-100 text-slate-600 group-hover:text-zen-700 flex items-center justify-center shrink-0 transition-transform duration-200 group-open:rotate-180">
+                            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </span>
+                    </summary>
+                    <div class="px-5 sm:px-6 pb-5 pt-1 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100/80">
+                        Setiap kali kamu mencari kata, AI akan melakukan verifikasi penelusuran (<em>Google Search Grounding</em>) dengan memprioritaskan <strong class="text-slate-800">lembaga bahasa atau kamus otoritatif resmi</strong> sesuai bahasa asal kata tersebut—seperti <strong class="text-slate-800">KBBI</strong> (Indonesia), <strong class="text-slate-800">표준국어대사전 NIKL</strong> (Korea), <strong class="text-slate-800">Oxford / Merriam-Webster</strong> (Inggris), <strong class="text-slate-800">Al-Mu'jam Al-Wasīṭ</strong> (Arab), dan kamus standar dunia lainnya. Jika kata tersebut berupa bahasa gaul (<em>slang</em>) atau istilah modern non-baku, AI akan menjelaskannya berdasarkan penggunaan umum dan menandainya secara transparan pada lencana sumber.
+                    </div>
+                </details>
+            </div>
+        </section>
+
     </main>
 
     <!-- API Key Settings Modal (With Clear User Instructions!) -->
